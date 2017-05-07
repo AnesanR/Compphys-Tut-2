@@ -1,0 +1,124 @@
+#Anesan Reddy 211507356
+#Tutorial 2
+
+
+_____________________________________________________________________________________
+#Q1
+
+import numpy as np
+from matplotlib import pyplot as plt
+from numpy.fft import fft,ifft
+def arrshift(x,i=0):
+    a = x*0
+    a[i]=1
+    aftrans = fft(a)
+    xftrans = fft(x)
+    return np.real(ifft(xftrans * aftrans))
+
+
+if __name__ == '__main__':
+    x = np.arange(-20, 20, 0.1)
+    y= np.exp(-0.5 * x ** 2 / 500 ** 2)
+    yshift = arrshift(y, y.size / 2)
+
+    print (yshift)
+______________________________________________________________________________________
+
+
+
+
+#Q2
+
+import numpy as np
+from matplotlib import pyplot as plt
+from numpy.fft import fft,ifft
+
+
+def correlation_function(f,g):
+    xftrans = fft(f)
+    yftrans = fft(g)
+    yconjugate = np.conj(yftrans)
+    return np.real(ifft(xftrans * yconjugate))
+
+if __name__=='__main__':
+    f = np.arange(-20, 20, 0.1)
+    g = np.arange(-20, 20, 0.1)
+    g = np.exp(-0.5 * f ** 2 / 5000 ** 2)
+    correlation = correlation_function(g, g)
+    #print(type(correlation))
+
+    plt.plot(f, correlation)
+    plt.show()
+
+
+
+_______________________________________________________________________________________
+
+
+#Q3
+
+
+import numpy as np
+from matplotlib import pyplot as plt
+from numpy.fft import fft,ifft
+def arrshift(x,i=0):
+    a = x*0
+    a[i]=1
+    aftrans = fft(a)
+    xftrans = fft(x)
+    return np.real(ifft(xftrans * aftrans))
+
+
+def correlation_function(f,g):
+    xftrans = fft(f)
+    yftrans = fft(g)
+    yconjugate = np.conj(yftrans)
+    return np.real(ifft(xftrans * yconjugate))
+
+if __name__=='__main__':
+        x=np.arange(-20,20,0.1)
+
+        y=np.exp(-0.5*x**2/5000**2)
+        ycorr = correlation_function(y, y)
+        yshift = arrshift(y, y.size / 4)
+        yshiftcorr = correlation_function(yshift, yshift)
+        meanerr = np.mean(np.abs(ycorr - yshiftcorr))
+        plt.plot(x, ycorr)
+        plt.plot(x, yshiftcorr)
+        plt.show()
+
+
+
+
+_________________________________________________________________________
+
+#Q4
+
+
+
+from numpy.fft import fft, ifft
+import numpy as np
+from matplotlib import pyplot as plt
+
+
+def conv_arr(x, y):
+    xnew = np.zeros(2 * x.size)
+    xnew[0:x.size] = x
+
+    ynew = np.zeros(2 * y.size)
+    ynew[0:y.size] = y
+    xnewft = fft(xnew)
+    ynewft = fft(ynew)
+    a = np.real(ifft(xnewft * ynewft))
+    return a[0:x.size]
+
+if __name__=='__main__':
+    x=np.arange(-20, 20, 0.1)
+    y=np.arange(-20, 20, 0.1)
+    y=np.exp(-0.5*x**2/2**2)
+    y=y/y.sum()
+
+    conv = conv_arr(y, y)
+    plt.plot(x, y)
+    plt.plot(x, conv)
+    plt.show()
